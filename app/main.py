@@ -3,6 +3,9 @@ from typing import Annotated
 from fastapi import Depends, FastAPI, HTTPException, Query
 from sqlmodel import Session, select
 
+from app.infrastructure.database import ProductDatabaseRepository
+from app.domain.repositories import ProductRepository
+
 from app.database import (
     get_session,
     create_db_and_tables,
@@ -13,6 +16,9 @@ from app.database import (
 
 app = FastAPI()
 
+
+def get_repository():
+    return ProductDatabaseRepository()
 
 @app.on_event("startup")
 def on_startup():
@@ -31,11 +37,11 @@ def create_product(
 
 @app.get("/products/")
 def read_products(
-    session: Session = Depends(get_session),
+    repository: ProductRepository = Depends(get_repository),
     offset: int = 0,
     limit: int = Query(default=100, le=100),
 ) -> list[ProductPublic]:
-    products = session.exec(select(Product).offset(offset).limit(limit)).all()
+    products = repository.list_all(offset, limit)
     return products
 
 

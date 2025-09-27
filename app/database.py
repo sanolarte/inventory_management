@@ -11,6 +11,7 @@ class ProductBase(SQLModel):
 
 
 class Product(ProductBase, table=True):
+    __table_args__ = {'extend_existing': True}
     id: Union[int, None] = Field(default=None, primary_key=True)
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
