@@ -1,0 +1,6 @@
+
+fastapi
+sqlmodel
+black
+
+uvicorn
