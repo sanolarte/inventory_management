@@ -7,7 +7,7 @@ class ProductBase(SQLModel):
     name: str = Field(index=True, nullable=False, max_length=100)
     description: Union[str, None]
     price: float
-    quantity: Union[str, None] = Field(default=None, index=True)
+    quantity: Union[float, None] = Field(default=None, index=True)
 
 
 class Product(ProductBase, table=True):
