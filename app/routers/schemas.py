@@ -1,16 +1,37 @@
-from typing import Union
+from typing import Union, Optional
 from datetime import datetime
+from pydantic import BaseModel
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 
 
-class ProductBase(SQLModel):
+
+
+class ProductCreate(BaseModel):
+    name: str
+    price: float
+    quantity: float
+    description: Optional[str]
+
+
+class ProductPublic(ProductCreate):
+    description: str
+    created_at: datetime
+    updated_at: datetime
+
+class ProductUpdate(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    price: Optional[float] = None
+    quantity: Optional[int] = None
+
+
+class ProductBase(BaseModel):
     name: str = Field(index=True, nullable=False, max_length=100)
     description: Union[str, None]
     price: float
     quantity: Union[str, None] = Field(default=None, index=True)
 
-
-class Product(ProductBase, table=True):
+class Product(ProductBase):
     __table_args__ = {'extend_existing': True}
     id: Union[int, None] = Field(default=None, primary_key=True)
     created_at: datetime = Field(default_factory=datetime.utcnow)
@@ -21,25 +42,3 @@ class ProductPublic(ProductBase):
     id: int
     created_at: datetime
     updated_at: datetime
-
-class ProductUpdate(ProductBase):
-    name: Union[str, None]
-    description: Union[str, None]
-    price: Union[float, None]
-    quantity: Union[int, None]
-
-
-sqlite_file_name = "database.db"
-sqlite_url = f"sqlite:///{sqlite_file_name}"
-
-connect_args = {"check_same_thread": False}
-engine = create_engine(sqlite_url, connect_args=connect_args)
-
-
-def create_db_and_tables():
-    SQLModel.metadata.create_all(engine)
-
-
-def get_session():
-    with Session(engine) as session:
-        yield session

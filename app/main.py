@@ -3,47 +3,46 @@ from typing import Annotated
 from fastapi import Depends, FastAPI, HTTPException, Query
 from sqlmodel import Session, select
 
-from app.database import (
-    get_session,
-    create_db_and_tables,
-    Product,
-    ProductUpdate,
-    ProductPublic,
-)
+from app.infrastructure.database import ProductDatabaseRepository
+from app.domain.repositories import ProductRepository
+
+from app.routers.schemas import ProductCreate, ProductPublic, ProductUpdate
 
 app = FastAPI()
 
 
+def get_repository():
+    return ProductDatabaseRepository()
+
 @app.on_event("startup")
 def on_startup():
-    create_db_and_tables()
+    repository = get_repository()
+    repository.create_db_and_tables()
 
 
 @app.post("/products/")
 def create_product(
-    product: Product, session: Session = Depends(get_session)
-) -> Product:
-    session.add(product)
-    session.commit()
-    session.refresh(product)
-    return product
+    product: ProductCreate, repository: ProductRepository = Depends(get_repository)
+) -> ProductPublic:
+    new_product = repository.create(product)
+    return new_product
 
 
 @app.get("/products/")
 def read_products(
-    session: Session = Depends(get_session),
+    repository: ProductRepository = Depends(get_repository),
     offset: int = 0,
     limit: int = Query(default=100, le=100),
 ) -> list[ProductPublic]:
-    products = session.exec(select(Product).offset(offset).limit(limit)).all()
+    products = repository.list_all(offset, limit)
     return products
 
 
 @app.get("/products/{product_id}")
 def read_product(
-    product_id: int, session: Session = Depends(get_session)
+    product_id: int, repository: ProductRepository = Depends(get_repository)
 ) -> ProductPublic:
-    product = session.get(Product, product_id)
+    product = repository.get(product_id)
     if not product:
         raise HTTPException(status_code=404, detail="product not found")
     return product
@@ -51,24 +50,21 @@ def read_product(
 
 @app.patch("/products/{product_id}")
 def update_product(
-    product_id: int, product: ProductUpdate, session: Session = Depends(get_session)
+    product_id: int, product: ProductUpdate, repository: ProductRepository = Depends(get_repository)
 ) -> ProductPublic:
-    product_db = session.get(Product, product_id)
-    if not product_db:
+    updated_product = repository.update(product_id, product)
+    if updated_product is None:
         raise HTTPException(status_code=404, detail="Product not found")
-    product_data = product.model_dump(exclude_unset=True)
-    product_db.sqlmodel_update(product_data)
-    session.add(product_db)
-    session.commit()
-    session.refresh(product_db)
-    return product_db
+    else:
+        return updated_product
 
 
 @app.delete("/products/{product_id}")
-def delete_product(product_id: int, session: Session = Depends(get_session)):
-    product = session.get(Product, product_id)
-    if not product:
+def delete_product(product_id: int, repository: ProductRepository = Depends(get_repository)):
+    is_deleted = repository.delete(product_id)
+    if update_product:
+        return {"deleted": True }
+    else:
         raise HTTPException(status_code=404, detail="Product not found")
-    session.delete(product)
-    session.commit()
-    return {"ok": True}
+
+
