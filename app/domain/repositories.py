@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from app.domain.models import Product
+from app.infrastructure.models import Product
 
 class ProductRepository(ABC):
     @abstractmethod
@@ -10,4 +10,16 @@ class ProductRepository(ABC):
     
     def retrieve_product(self) -> Product:
         """Get one product by id"""
+        raise NotImplementedError
+
+    def update(self) -> Product:
+        """Update product by id"""
+        raise NotImplementedError
+    
+    def delete(self):
+        """Delete product by id"""
+        raise NotImplementedError
+    
+    def create(self):
+        """Create a new product"""
         raise NotImplementedError
