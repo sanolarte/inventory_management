@@ -61,7 +61,8 @@ python -c "import secrets; print('SECRET_KEY=' + secrets.token_hex(32))" >> .env
 
 ## ▶️ Running the Application
 
-Use Uvicorn to run the FastAPI application:
+
+**Use Uvicorn to run the FastAPI application (Backend):**
 ```
 uvicorn app.main:app --reload
 ```
@@ -72,6 +73,20 @@ uvicorn app.main:app --reload
 
 The app will start by default at http://127.0.0.1:8000
 
+
+
+**Use npm to run the FrontEnd**
+
+Install dependencies
+```
+npm install
+```
+
+Run application
+```
+npm run dev
+```
+The app will start by default at http://localhost:5173
 
 ## Run Tests
 Both regression and unit tests can be ran using Pytest
