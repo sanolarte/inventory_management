@@ -16,7 +16,7 @@ export default function ProductForm({ onSubmit }) {
             description: form.description,
         };
         onSubmit(newProduct);
-        setForm({ name: "", price: "", quantity: "" });
+        setForm({ name: "", price: "", quantity: "", description: "" });
     };
 
     return (

@@ -24,6 +24,7 @@ export default function ProductTable({ products, onDelete, onUpdate }) {
             name: editForm.name,
             price: parseFloat(editForm.price),
             quantity: parseInt(editForm.quantity),
+            description: editForm.description
         });
         cancelEdit();
     };
@@ -35,6 +36,7 @@ export default function ProductTable({ products, onDelete, onUpdate }) {
                     <th className="p-2 border">Name</th>
                     <th className="p-2 border">Price</th>
                     <th className="p-2 border">Quantity</th>
+                    <th className="p-2 border">Description</th>
                     <th className="p-2 border">Actions</th>
                 </tr>
             </thead>
@@ -77,6 +79,19 @@ export default function ProductTable({ products, onDelete, onUpdate }) {
                                 p.quantity
                             )}
                         </td>
+                        <td className="p-2 border">
+                            {editingId === p.id ? (
+                                <input
+                                    name="description"
+                                    value={editForm.description}
+                                    onChange={handleChange}
+                                    className="border p-1"
+                                />
+                            ) : (
+                                p.description
+                            )}
+                        </td>
+
                         <td className="p-2 border space-x-2">
                             {editingId === p.id ? (
                                 <>
