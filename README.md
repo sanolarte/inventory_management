@@ -68,6 +68,13 @@ uvicorn app.main:app --reload
 The app will start by default at http://127.0.0.1:8000
 
 
+## Run Tests
+Both regression and unit tests can be ran using Pytest
+```
+pytest
+```
+
+
 
 ## 📚 API Documentation
 

@@ -27,12 +27,6 @@ def get_repository():
     return UserDatabaseRepository()
 
 
-def get_user(db, username: str):
-    if username in db:
-        user_dict = db[username]
-        return UserInDB(**user_dict)
-
-
 def authenticate_user(repository, username: str, password: str):
     user = repository.get(username)
     if not user or not pwd_context.verify(password, user.hashed_password):
