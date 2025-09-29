@@ -1,11 +1,9 @@
-from fastapi import APIRouter
 from fastapi import Depends, APIRouter, HTTPException, Query
 
 from app.infrastructure.database import ProductDatabaseRepository
 from app.domain.repositories import ProductRepository
 
 from app.routers.schemas import ProductCreate, ProductPublic, ProductUpdate
-
 
 router = APIRouter(prefix="/products")
 
