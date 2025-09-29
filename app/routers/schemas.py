@@ -20,14 +20,14 @@ class ProductUpdate(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
     price: Optional[float] = None
-    quantity: Optional[int] = None
+    quantity: Optional[float] = None
 
 
 class ProductBase(BaseModel):
     name: str = Field(index=True, nullable=False, max_length=100)
     description: Union[str, None]
     price: float
-    quantity: Union[str, None] = Field(default=None, index=True)
+    quantity: Union[float, None] = Field(default=None, index=True)
 
 class Product(ProductBase):
     __table_args__ = {'extend_existing': True}
