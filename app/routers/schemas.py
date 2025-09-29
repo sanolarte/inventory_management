@@ -8,13 +8,14 @@ class ProductCreate(BaseModel):
     name: str
     price: float
     quantity: float
-    description: Optional[str]
+    description: Optional[str] = None
 
 
 class ProductPublic(ProductCreate):
     description: str
     created_at: datetime
     updated_at: datetime
+
 
 class ProductUpdate(BaseModel):
     name: Optional[str] = None
@@ -29,8 +30,9 @@ class ProductBase(BaseModel):
     price: float
     quantity: Union[float, None] = Field(default=None, index=True)
 
+
 class Product(ProductBase):
-    __table_args__ = {'extend_existing': True}
+    __table_args__ = {"extend_existing": True}
     id: Union[int, None] = Field(default=None, primary_key=True)
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
@@ -45,7 +47,7 @@ class ProductPublic(ProductBase):
 class User(BaseModel):
     username: str
     email: Optional[str] = None
-    full_name:Optional[str] = None
+    full_name: Optional[str] = None
     disabled: Optional[bool] = None
 
 

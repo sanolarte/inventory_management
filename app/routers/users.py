@@ -7,20 +7,21 @@ from pydantic import BaseModel
 
 from app.infrastructure.database import UserDatabaseRepository
 from app.domain.repositories import UserRepository
-from app.routers.security import authenticate_user, create_access_token, get_current_active_user
+from app.routers.security import (
+    authenticate_user,
+    create_access_token,
+    get_current_active_user,
+)
 from app.routers.schemas import User
 
+
+ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 router = APIRouter(prefix="/users")
 
 
 def get_repository():
     return UserDatabaseRepository()
-
-
-# to get a string like this run:
-# openssl rand -hex 32
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 
 class Token(BaseModel):
@@ -31,7 +32,7 @@ class Token(BaseModel):
 @router.post("/token")
 async def login_for_access_token(
     form_data: OAuth2PasswordRequestForm = Depends(),
-    repository: UserRepository = Depends(get_repository)
+    repository: UserRepository = Depends(get_repository),
 ) -> Token:
     user = authenticate_user(repository, form_data.username, form_data.password)
     if not user:

@@ -1,6 +1,9 @@
 # tests/conftest.py
 import sys, os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))))
+
+sys.path.append(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+)
 
 
 import pytest
@@ -12,7 +15,15 @@ from fastapi import FastAPI
 class FakeRepo:
     def __init__(self):
         self._items = {
-            1: {"id": 1, "name": "Apple", "price": 3.5, "quantity": 5, "description": "Fruit", "created_at":"2025-09-28 18:12:24.403999", "updated_at": "2025-09-28 18:12:24.403999"},
+            1: {
+                "id": 1,
+                "name": "Apple",
+                "price": 3.5,
+                "quantity": 5,
+                "description": "Fruit",
+                "created_at": "2025-09-28 18:12:24.403999",
+                "updated_at": "2025-09-28 18:12:24.403999",
+            },
         }
 
     def create(self, product):
@@ -25,7 +36,7 @@ class FakeRepo:
         return data
 
     def list_all(self, offset, limit):
-        return list(self._items.values())[offset:offset+limit]
+        return list(self._items.values())[offset : offset + limit]
 
     def get(self, product_id):
         return self._items.get(product_id)
@@ -41,7 +52,6 @@ class FakeRepo:
 
     def delete(self, product_id):
         return self._items.pop(product_id, None) is not None
-
 
 
 @pytest.fixture
