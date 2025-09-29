@@ -54,6 +54,11 @@ pip install -r requirements.txt
 ```
 
 
+4. **Set Env variables**
+```
+python -c "import secrets; print('SECRET_KEY=' + secrets.token_hex(32))" >> .env
+```
+
 ## ▶️ Running the Application
 
 Use Uvicorn to run the FastAPI application:

@@ -1,6 +1,6 @@
 from datetime import datetime, timezone, timedelta
-from typing import Optional, Union
-
+import os
+from typing import Union
 
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends, status, HTTPException
@@ -13,10 +13,12 @@ from pydantic import BaseModel
 from app.domain.repositories import UserRepository
 from app.infrastructure.database import UserDatabaseRepository
 from app.routers.schemas import User, UserInDB, TokenData
+from app.routers.utils import load_env
 
 
 
-SECRET_KEY = "49dd5d6e9b1487e5a45cb7682d182d2fb622e45f9d82e46aaf95c3a748c61477"
+load_env()
+SECRET_KEY = os.environ["SECRET_KEY"]
 ALGORITHM = "HS256"
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="users/token")

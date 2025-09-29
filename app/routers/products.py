@@ -5,6 +5,7 @@ from app.domain.repositories import ProductRepository
 
 from app.routers.schemas import ProductCreate, ProductPublic, ProductUpdate
 
+
 router = APIRouter(prefix="/products")
 
 
