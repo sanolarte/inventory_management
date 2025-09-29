@@ -4,6 +4,9 @@ from app.infrastructure.database import ProductDatabaseRepository
 from app.domain.repositories import ProductRepository
 
 from app.routers.schemas import ProductCreate, ProductPublic, ProductUpdate
+from app.routers.security import get_current_active_user
+from app.routers.schemas import User
+
 
 
 router = APIRouter(prefix="/products")
@@ -11,6 +14,7 @@ router = APIRouter(prefix="/products")
 
 def get_repository():
     return ProductDatabaseRepository()
+
 
 @router.on_event("startup")
 def on_startup():
@@ -20,7 +24,9 @@ def on_startup():
 
 @router.post("/")
 def create_product(
-    product: ProductCreate, repository: ProductRepository = Depends(get_repository)
+    product: ProductCreate,
+    repository: ProductRepository = Depends(get_repository),
+    current_user: User = Depends(get_current_active_user),
 ) -> ProductPublic:
     new_product = repository.create(product)
     return new_product
@@ -29,6 +35,7 @@ def create_product(
 @router.get("/")
 def read_products(
     repository: ProductRepository = Depends(get_repository),
+    current_user: User = Depends(get_current_active_user),
     offset: int = 0,
     limit: int = Query(default=100, le=100),
 ) -> list[ProductPublic]:
@@ -38,7 +45,9 @@ def read_products(
 
 @router.get("/{product_id}")
 def read_product(
-    product_id: int, repository: ProductRepository = Depends(get_repository)
+    product_id: int,
+    repository: ProductRepository = Depends(get_repository),
+    current_user: User = Depends(get_current_active_user),
 ) -> ProductPublic:
     product = repository.get(product_id)
     if not product:
@@ -48,7 +57,10 @@ def read_product(
 
 @router.patch("/{product_id}")
 def update_product(
-    product_id: int, product: ProductUpdate, repository: ProductRepository = Depends(get_repository)
+    product_id: int,
+    product: ProductUpdate,
+    repository: ProductRepository = Depends(get_repository),
+    current_user: User = Depends(get_current_active_user),
 ) -> ProductPublic:
     updated_product = repository.update(product_id, product)
     if updated_product is None:
@@ -58,11 +70,13 @@ def update_product(
 
 
 @router.delete("/{product_id}")
-def delete_product(product_id: int, repository: ProductRepository = Depends(get_repository)):
+def delete_product(
+    product_id: int,
+    repository: ProductRepository = Depends(get_repository),
+    current_user: User = Depends(get_current_active_user),
+):
     is_deleted = repository.delete(product_id)
     if update_product:
-        return {"deleted": True }
+        return {"deleted": True}
     else:
         raise HTTPException(status_code=404, detail="Product not found")
-
-

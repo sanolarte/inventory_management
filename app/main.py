@@ -4,7 +4,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.routers import products, users
 
 
-
 app = FastAPI()
 
 origins = [
@@ -23,5 +22,3 @@ app.add_middleware(
 
 app.include_router(products.router)
 app.include_router(users.router)
-
-
