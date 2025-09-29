@@ -1,9 +1,7 @@
 from typing import Union, Optional
 from datetime import datetime
 from pydantic import BaseModel
-from sqlmodel import Field, Session, SQLModel, create_engine, select
-
-
+from sqlmodel import Field
 
 
 class ProductCreate(BaseModel):
@@ -42,3 +40,18 @@ class ProductPublic(ProductBase):
     id: int
     created_at: datetime
     updated_at: datetime
+
+
+class User(BaseModel):
+    username: str
+    email: Optional[str] = None
+    full_name:Optional[str] = None
+    disabled: Optional[bool] = None
+
+
+class TokenData(BaseModel):
+    username: Union[str, None] = None
+
+
+class UserInDB(User):
+    hashed_password: str

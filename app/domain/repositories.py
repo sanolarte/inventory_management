@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from app.infrastructure.models import Product
+from app.infrastructure.models import Product, User
 
 class ProductRepository(ABC):
     @abstractmethod
@@ -22,4 +22,11 @@ class ProductRepository(ABC):
     
     def create(self):
         """Create a new product"""
+        raise NotImplementedError
+    
+
+
+class UserRepository(ABC):
+    def get(self) -> User:
+        """Get one user by username"""
         raise NotImplementedError

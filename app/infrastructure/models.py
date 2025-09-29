@@ -15,3 +15,12 @@ class Product(ProductBase, table=True):
     id: Union[int, None] = Field(default=None, primary_key=True)
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+class User(SQLModel, table=True):
+    id: Union[int, None] = Field(default=None)
+    username: str = Field(primary_key=True)
+    full_name: str
+    email: str
+    hashed_password: str
+    disabled: bool

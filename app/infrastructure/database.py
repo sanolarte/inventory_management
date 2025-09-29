@@ -1,8 +1,8 @@
 from functools import wraps
 from sqlmodel import create_engine, Session, SQLModel, select
 from sqlmodel import Session, select
-from app.domain.repositories import ProductRepository
-from app.infrastructure.models import Product
+from app.domain.repositories import ProductRepository, UserRepository
+from app.infrastructure.models import Product, User
 
 
 sqlite_file_name = "database.db"
@@ -66,3 +66,13 @@ class ProductDatabaseRepository(ProductRepository):
         session.commit()
         session.refresh(db_product)
         return db_product
+    
+
+class UserDatabaseRepository(UserRepository):
+    
+    @with_session
+    def get(self, username, session: Session):
+        user = session.get(User, username)
+        return user
+
+
