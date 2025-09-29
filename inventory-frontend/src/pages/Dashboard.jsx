@@ -41,15 +41,22 @@ export default function Dashboard() {
     };
 
     return (
-        <div className="p-6">
-            <div className="flex justify-between mb-4">
+        <div className="min-h-screen bg-gray-50 flex flex-col">
+            <header className="bg-white shadow px-6 py-4 flex justify-between">
                 <h1 className="text-2xl font-bold">Inventory Dashboard</h1>
-                <button onClick={logout} className="bg-red-500 text-white p-2 rounded">
+                <button onClick={logout} className="bg-red-500 text-white px-4 py-2 rounded">
                     Logout
                 </button>
-            </div>
-            <ProductForm onSubmit={handleCreate} />
-            <ProductTable products={products} onDelete={handleDelete} onUpdate={handleUpdate} />
-        </div>
+            </header>
+            <main className="flex-1 px-6 py-6">
+                <div className="bg-white rounded-xl shadow p-4 mb-6">
+                    <ProductForm onSubmit={handleCreate} />
+                </div>
+                <div className="bg-white rounded-xl shadow p-4">
+                    <ProductTable products={products} onDelete={handleDelete} onUpdate={handleUpdate} />
+                </div>
+            </main >
+        </div >
+
     );
 }

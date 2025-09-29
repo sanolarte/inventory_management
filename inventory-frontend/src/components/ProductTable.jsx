@@ -7,12 +7,12 @@ export default function ProductTable({ products, onDelete, onUpdate }) {
 
     const startEdit = (p) => {
         setEditingId(p.id);
-        setEditForm({ name: p.name, price: p.price, quantity: p.quantity });
+        setEditForm({ name: p.name, price: p.price, quantity: p.quantity, description: p.description });
     };
 
     const cancelEdit = () => {
         setEditingId(null);
-        setEditForm({ name: "", price: "", quantity: "" });
+        setEditForm({ name: "", price: "", quantity: "", description: "" });
     };
 
     const handleChange = (e) => {
@@ -32,7 +32,7 @@ export default function ProductTable({ products, onDelete, onUpdate }) {
     return (
         <table className="min-w-full border">
             <thead>
-                <tr className="bg-gray-100">
+                <tr className="bg-orange-400">
                     <th className="p-2 border">Name</th>
                     <th className="p-2 border">Price</th>
                     <th className="p-2 border">Quantity</th>
