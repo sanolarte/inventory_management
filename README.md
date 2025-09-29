@@ -28,7 +28,7 @@ It provides secure authentication (JWT) and CRUD operations for managing product
 1. **Clone the repository:**
 
 ```
-git clone https://github.com/yourusername/inventory-management.git
+git clone https://github.com/sanolarte/inventory-management.git
 cd inventory-management
 ```
 
